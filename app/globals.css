@@ -2,19 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 全局样式 - Apple 风格 */
-body {
-  background-color: #F5F5F7; /* 使用苹果的浅灰色背景 */
-  color: #1c1c1e; /* 深色文字 */
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Meta/Facebook Design System - 完整实现 */
+
+/* === 全局字体系统 === */
+* {
+  font-family: Segoe UI, Helvetica, Arial, sans-serif;
 }
 
-/* 隐藏滚动条但保持功能 */
+body {
+  /* Facebook 官方字体栈 */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Helvetica, Arial, sans-serif;
+  background-color: #F0F2F5; /* Facebook 背景灰 */
+  color: #050505; /* Facebook 主文字色 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === 滚动条样式 - Meta风格 === */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -22,32 +31,265 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  background: #BCC0C4;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: #8A8D91;
 }
 
-/* 玻璃拟态效果 - 更接近 iOS/macOS 风格 */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+/* === Meta 动画关键帧 === */
+
+/* 淡入动画 */
+@keyframes meta-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.glass-dark {
-  background: rgba(50, 50, 50, 0.6);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* 上滑动画 - Modal专用 */
+@keyframes meta-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* 平滑过渡 */
+/* 旋转动画 - 加载器 */
+@keyframes meta-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 脉冲动画 - 状态指示器 */
+@keyframes meta-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+/* 波纹效果 - 按钮点击 */
+@keyframes meta-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* === 动画类 === */
+.animate-meta-fade-in {
+  animation: meta-fade-in 300ms cubic-bezier(0.08, 0.52, 0.52, 1);
+}
+
+.animate-meta-slide-up {
+  animation: meta-slide-up 300ms cubic-bezier(0.08, 0.52, 0.52, 1);
+}
+
+.animate-meta-spin {
+  animation: meta-spin 800ms linear infinite;
+}
+
+.animate-meta-pulse {
+  animation: meta-pulse 2s ease-in-out infinite;
+}
+
+/* === Meta 颜色变量 === */
+:root {
+  /* 主色调 */
+  --meta-blue: #1877F2;
+  --meta-blue-hover: #166FE5;
+  --meta-blue-active: #1567D3;
+  --meta-blue-light: #E7F3FF;
+
+  /* 文字颜色 */
+  --meta-text-primary: #050505;
+  --meta-text-secondary: #65676B;
+  --meta-text-tertiary: #8A8D91;
+  --meta-text-placeholder: #BCC0C4;
+
+  /* 背景颜色 */
+  --meta-bg-primary: #FFFFFF;
+  --meta-bg-secondary: #F0F2F5;
+  --meta-bg-hover: #F2F3F5;
+  --meta-bg-active: #E4E6EB;
+  --meta-bg-wash: #F5F6F7;
+
+  /* 边框颜色 */
+  --meta-border-primary: #CED0D4;
+  --meta-border-secondary: #E4E6EB;
+
+  /* 功能颜色 */
+  --meta-green: #42B72A;
+  --meta-red: #F02849;
+  --meta-yellow: #FFB800;
+
+  /* 阴影 */
+  --meta-shadow-1: 0 1px 2px rgba(0, 0, 0, .1);
+  --meta-shadow-2: 0 2px 4px rgba(0, 0, 0, .1);
+  --meta-shadow-modal: 0 12px 28px 0 rgba(0,0,0,.2), 0 2px 4px 0 rgba(0,0,0,.1);
+}
+
+/* === Meta 按钮基础样式 === */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* === Meta 输入框样式 === */
+input {
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: var(--meta-text-placeholder);
+}
+
+/* === Meta 过渡效果 === */
 * {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms; /* 稍稍放慢，更优雅 */
+  transition-property: background-color, border-color, color, fill, stroke,
+                      opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.08, 0.52, 0.52, 1);
+  transition-duration: 200ms;
+}
+
+/* === Meta Typography === */
+.meta-h1 {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 700;
+  color: var(--meta-text-primary);
+}
+
+.meta-h2 {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--meta-text-primary);
+}
+
+.meta-h3 {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--meta-text-primary);
+}
+
+.meta-body {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--meta-text-primary);
+}
+
+.meta-caption {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--meta-text-secondary);
+}
+
+/* === 触摸优化 === */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* === 硬件加速 === */
+button,
+.animate-meta-slide-up,
+.animate-meta-fade-in {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* === Focus 样式 - Meta 风格 === */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--meta-blue);
+  outline-offset: 2px;
+}
+
+/* === 选中文本颜色 === */
+::selection {
+  background-color: var(--meta-blue-light);
+  color: var(--meta-text-primary);
+}
+
+/* === 自定义工具类 === */
+.meta-card {
+  background: var(--meta-bg-primary);
+  border-radius: 8px;
+  box-shadow: var(--meta-shadow-1);
+}
+
+.meta-card-hover {
+  transition: box-shadow 200ms cubic-bezier(0.08, 0.52, 0.52, 1);
+}
+
+.meta-card-hover:hover {
+  box-shadow: var(--meta-shadow-2);
+}
+
+/* === 响应式字体缩放 === */
+@media (max-width: 640px) {
+  .meta-h1 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .meta-h2 {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+/* === 深色模式准备（预留） === */
+@media (prefers-color-scheme: dark) {
+  /* Meta 深色模式变量 - 可选实现 */
+  :root {
+    --meta-bg-primary: #242526;
+    --meta-bg-secondary: #18191A;
+    --meta-text-primary: #E4E6EB;
+    --meta-text-secondary: #B0B3B8;
+  }
+}
+
+/* === 打印样式优化 === */
+@media print {
+  body {
+    background: white;
+  }
+
+  button {
+    display: none;
+  }
 }

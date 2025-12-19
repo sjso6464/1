@@ -44,40 +44,41 @@ const InfoRow = memo(({ label, value, onCopy, isCopied, showBorder = true }: {
   isCopied: boolean;
   showBorder?: boolean;
 }) => (
-  <div className={`${showBorder ? 'border-b border-gray-200' : ''}`}>
+  <div className={`${showBorder ? 'border-b border-[#CED0D4]' : ''}`}>
     <button
       onClick={onCopy}
-      className="w-full flex items-center justify-between py-3 px-4 hover:bg-gray-50 transition-colors duration-150 touch-manipulation"
+      className="w-full flex items-center justify-between py-3 px-4 hover:bg-[#F2F3F5] active:bg-[#E4E6EB] transition-colors duration-200 touch-manipulation relative overflow-hidden group"
     >
-      <span className="text-sm font-semibold text-gray-500">{label}</span>
+      <span className="text-sm font-semibold text-[#65676B]">{label}</span>
       <div className="flex items-center gap-2 min-w-0 flex-1 justify-end overflow-hidden">
         <div className="relative w-full flex justify-end">
-          <span 
-            className={`text-sm font-medium text-gray-900 truncate transition-all duration-150 ${
-              isCopied ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+          <span
+            className={`text-sm font-medium text-[#050505] truncate transition-all duration-200 ${
+              isCopied ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'
             }`}
           >
             {value || '---'}
           </span>
-          <div 
-            className={`absolute right-0 flex items-center gap-1.5 transition-all duration-150 ${
-              isCopied ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+          <div
+            className={`absolute right-0 flex items-center gap-1.5 transition-all duration-200 ${
+              isCopied ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2 pointer-events-none'
             }`}
           >
-            <Icon name="check" className="w-4 h-4 text-green-600" />
-            <span className="text-sm font-medium text-green-600 whitespace-nowrap">已复制</span>
+            <Icon name="check" className="w-4 h-4 text-[#1877F2]" />
+            <span className="text-sm font-semibold text-[#1877F2] whitespace-nowrap">已复制</span>
           </div>
         </div>
       </div>
+      <div className="absolute inset-0 bg-[#E4E6EB] opacity-0 group-active:opacity-100 transition-opacity duration-200 pointer-events-none" />
     </button>
   </div>
 ));
 InfoRow.displayName = 'InfoRow';
 
-const Modal = memo(({ isOpen, onClose, title, children }: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  title: string; 
+const Modal = memo(({ isOpen, onClose, title, children }: {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
   children: React.ReactNode;
 }) => {
   useEffect(() => {
@@ -92,21 +93,24 @@ const Modal = memo(({ isOpen, onClose, title, children }: {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-black/20 backdrop-blur-[2px] animate-fb-fade-in" 
-        onClick={onClose} 
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-meta-fade-in">
+      <div
+        className="absolute inset-0 bg-white/80"
+        onClick={onClose}
       />
-      <div 
-        className="relative w-full max-w-md bg-white/95 backdrop-blur-[2px] rounded-xl shadow-2xl max-h-[80vh] flex flex-col animate-fb-scale-fade"
+      <div
+        className="relative w-full max-w-md bg-white rounded-lg shadow-meta-modal max-h-[80vh] flex flex-col animate-meta-slide-up"
+        style={{
+          boxShadow: '0 12px 28px 0 rgba(0,0,0,.2), 0 2px 4px 0 rgba(0,0,0,.1)'
+        }}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between p-4 border-b border-[#CED0D4]">
+          <h2 className="text-lg font-bold text-[#050505]">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-150 touch-manipulation"
+            className="w-9 h-9 flex items-center justify-center hover:bg-[#F2F3F5] active:bg-[#E4E6EB] rounded-full transition-colors duration-200 touch-manipulation"
           >
-            <Icon name="close" className="w-5 h-5 text-gray-600" />
+            <Icon name="close" className="w-5 h-5 text-[#65676B]" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto">
@@ -118,53 +122,54 @@ const Modal = memo(({ isOpen, onClose, title, children }: {
 });
 Modal.displayName = 'Modal';
 
-const ListItem = memo(({ label, isSelected, onClick }: { 
-  label: string; 
-  isSelected: boolean; 
+const ListItem = memo(({ label, isSelected, onClick }: {
+  label: string;
+  isSelected: boolean;
   onClick: () => void;
 }) => (
   <button
     onClick={onClick}
-    className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-150 touch-manipulation ${
-      isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'
+    className={`w-full flex items-center justify-between px-4 py-3 transition-all duration-200 touch-manipulation relative overflow-hidden group ${
+      isSelected ? 'bg-[#E7F3FF]' : 'hover:bg-[#F2F3F5] active:bg-[#E4E6EB]'
     }`}
   >
-    <span className={`text-sm transition-all duration-150 ${isSelected ? 'font-semibold text-blue-600' : 'text-gray-900'}`}>
+    <span className={`text-sm transition-all duration-200 ${isSelected ? 'font-bold text-[#1877F2]' : 'font-normal text-[#050505]'}`}>
       {label}
     </span>
     {isSelected && (
-      <Icon name="check" className="w-5 h-5 text-blue-600" />
+      <Icon name="check" className="w-5 h-5 text-[#1877F2]" />
     )}
+    <div className="absolute inset-0 bg-[#E4E6EB] opacity-0 group-active:opacity-100 transition-opacity duration-200 pointer-events-none" />
   </button>
 ));
 ListItem.displayName = 'ListItem';
 
-const CountryList = memo(({ countries, selectedCode, onSelect }: { 
-  countries: CountryConfig[]; 
-  selectedCode: string; 
+const CountryList = memo(({ countries, selectedCode, onSelect }: {
+  countries: CountryConfig[];
+  selectedCode: string;
   onSelect: (c: CountryConfig) => void;
 }) => (
-  <div className="divide-y divide-gray-200">
+  <div className="divide-y divide-[#CED0D4]">
     {countries.map((country) => (
-      <ListItem 
+      <ListItem
         key={country.code}
-        label={country.name} 
-        isSelected={selectedCode === country.code} 
-        onClick={() => onSelect(country)} 
+        label={country.name}
+        isSelected={selectedCode === country.code}
+        onClick={() => onSelect(country)}
       />
     ))}
   </div>
 ));
 CountryList.displayName = 'CountryList';
 
-const DomainList = memo(({ allDomains, selectedDomain, onSelect }: { 
-  allDomains: string[]; 
-  selectedDomain: string; 
+const DomainList = memo(({ allDomains, selectedDomain, onSelect }: {
+  allDomains: string[];
+  selectedDomain: string;
   onSelect: (d: string) => void;
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [displayCount, setDisplayCount] = useState(50);
-  
+
   const filteredDomains = useMemo(() => {
     if (!searchQuery) return allDomains;
     return allDomains.filter(d => d.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -180,46 +185,46 @@ const DomainList = memo(({ allDomains, selectedDomain, onSelect }: {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-200 shrink-0">
+      <div className="p-4 border-b border-[#CED0D4] shrink-0">
         <div className="relative">
-          <Icon name="search" className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input 
-            type="text" 
-            value={searchQuery} 
-            onChange={(e) => setSearchQuery(e.target.value)} 
-            placeholder="搜索域名" 
-            className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm outline-none focus:bg-gray-200 focus:ring-2 focus:ring-blue-500/20 transition-all duration-150" 
+          <Icon name="search" className="w-5 h-5 text-[#8A8D91] absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="搜索域名"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#F0F2F5] rounded-full text-sm outline-none border border-transparent focus:border-[#1877F2] focus:bg-white transition-all duration-200 placeholder-[#8A8D91] text-[#050505]"
           />
         </div>
       </div>
-      <div className="divide-y divide-gray-200 overflow-y-auto flex-1">
+      <div className="divide-y divide-[#CED0D4] overflow-y-auto flex-1">
         {!searchQuery && (
-          <ListItem 
-            label="随机域名" 
-            isSelected={selectedDomain === 'random'} 
-            onClick={() => onSelect('random')} 
+          <ListItem
+            label="随机域名"
+            isSelected={selectedDomain === 'random'}
+            onClick={() => onSelect('random')}
           />
         )}
         {displayedDomains.map((domain) => (
-          <ListItem 
+          <ListItem
             key={domain}
-            label={domain} 
-            isSelected={selectedDomain === domain} 
-            onClick={() => onSelect(domain)} 
+            label={domain}
+            isSelected={selectedDomain === domain}
+            onClick={() => onSelect(domain)}
           />
         ))}
         {displayCount < filteredDomains.length && (
-          <div className="sticky bottom-0 bg-white border-t border-gray-200 text-center py-3">
+          <div className="sticky bottom-0 bg-white border-t border-[#CED0D4] text-center py-3">
             <button
               onClick={() => setDisplayCount(prev => Math.min(prev + 50, filteredDomains.length))}
-              className="text-blue-600 text-sm font-semibold hover:text-blue-700 touch-manipulation transition-all duration-150"
+              className="text-[#1877F2] text-sm font-bold hover:underline touch-manipulation transition-all duration-200"
             >
               加载更多
             </button>
           </div>
         )}
         {filteredDomains.length === 0 && (
-          <div className="text-center py-8 text-gray-400 text-sm">
+          <div className="text-center py-12 text-[#8A8D91] text-sm">
             无匹配结果
           </div>
         )}
@@ -229,7 +234,7 @@ const DomainList = memo(({ allDomains, selectedDomain, onSelect }: {
 });
 DomainList.displayName = 'DomainList';
 
-export default function FacebookStyleGenerator() {
+export default function MetaStyleGenerator() {
   const [selectedCountry, setSelectedCountry] = useState<CountryConfig>(countries[0]);
   const [selectedDomain, setSelectedDomain] = useState<string>('random');
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -241,21 +246,18 @@ export default function FacebookStyleGenerator() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [bgLoaded, setBgLoaded] = useState(false);
-  
+
   const copyTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const copyToClipboard = useCallback(async (text: string, label: string) => {
-    // 立即显示反馈，不等待复制完成
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
     setCopiedField(label);
-    
+
     try {
       await navigator.clipboard.writeText(text);
       copyTimerRef.current = setTimeout(() => setCopiedField(null), 2000);
     } catch (e) {
       console.error(e);
-      // 如果复制失败，仍然显示反馈但快速消失
       copyTimerRef.current = setTimeout(() => setCopiedField(null), 1000);
     }
   }, []);
@@ -263,7 +265,7 @@ export default function FacebookStyleGenerator() {
   const generate = useCallback(() => {
     setIsGenerating(true);
     setCopiedField(null);
-    
+
     setTimeout(() => {
       try {
         const { firstName, lastName } = generateName(selectedCountry.code);
@@ -273,13 +275,13 @@ export default function FacebookStyleGenerator() {
         const customDomain = selectedDomain === 'random' ? undefined : selectedDomain;
         const email = generateEmail(firstName, lastName, customDomain);
         setUserInfo({ firstName, lastName, birthday, phone, password, email });
-      } catch (error) { 
-        console.error(error); 
+      } catch (error) {
+        console.error(error);
       }
       setIsGenerating(false);
-    }, 250);
+    }, 300);
   }, [selectedCountry, selectedDomain]);
-  
+
   const handleInboxClick = useCallback(() => {
     const emailName = userInfo.email.split('@')[0];
     window.open(`https://yopmail.net/?login=${emailName}`, '_blank');
@@ -298,23 +300,15 @@ export default function FacebookStyleGenerator() {
           if (detectedCountry) setSelectedCountry(detectedCountry);
         }
         setIsInitialized(true);
-      } catch (error) { 
-        if (isMounted) { 
-          setIpInfo({ ip: '检测失败', country: 'US' }); 
-          setIsInitialized(true); 
-        } 
+      } catch (error) {
+        if (isMounted) {
+          setIpInfo({ ip: '检测失败', country: 'US' });
+          setIsInitialized(true);
+        }
       }
     };
     initializeApp();
     return () => { isMounted = false; };
-  }, []);
-
-  // 预加载背景图片
-  useEffect(() => {
-    const img = new Image();
-    img.src = 'https://www.loliapi.com/acg/';
-    img.onload = () => setBgLoaded(true);
-    img.onerror = () => setBgLoaded(true); // 加载失败也显示，避免一直等待
   }, []);
 
   useEffect(() => {
@@ -331,106 +325,93 @@ export default function FacebookStyleGenerator() {
   const displayDomain = selectedDomain === 'random' ? '随机' : selectedDomain;
 
   const handleCountrySelect = useCallback((country: CountryConfig) => {
-    setSelectedCountry(country); 
+    setSelectedCountry(country);
     setShowCountryModal(false);
   }, []);
 
   const handleDomainSelect = useCallback((domain: string) => {
     setSelectedDomain(domain);
     setShowDomainModal(false);
-    
-    // 如果已经生成了邮箱，只更换后缀
+
     if (userInfo.email) {
       const emailPrefix = userInfo.email.split('@')[0];
       const customDomain = domain === 'random' ? undefined : domain;
-      const newEmail = customDomain 
+      const newEmail = customDomain
         ? `${emailPrefix}@${customDomain}`
         : generateEmail(userInfo.firstName, userInfo.lastName);
-      
+
       setUserInfo(prev => ({ ...prev, email: newEmail }));
     }
   }, [userInfo.email, userInfo.firstName, userInfo.lastName]);
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
-      {/* 背景图片 */}
-      <div 
-        className={`fixed inset-0 z-0 transition-opacity duration-700 ${
-          bgLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          backgroundImage: 'url(https://www.loliapi.com/acg/)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-[2px]" />
-      </div>
-
+    <div className="min-h-screen bg-[#F0F2F5]">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white border-b border-[#CED0D4]" style={{ boxShadow: '0 2px 4px rgba(0,0,0,.1)' }}>
         <div className="flex items-center justify-between px-4 h-14">
-          <h1 className="text-xl font-bold text-blue-600">脸书小助手</h1>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-full">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-fb-pulse" />
-            <span className="text-xs font-medium text-gray-600">{ipInfo.ip}</span>
+          <h1 className="text-xl font-bold text-[#1877F2]">脸书小助手</h1>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E7F3FF] rounded-full">
+            <div className="w-2 h-2 rounded-full bg-[#42B72A] animate-meta-pulse" />
+            <span className="text-xs font-semibold text-[#050505]">{ipInfo.ip}</span>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto p-4 space-y-4 relative z-10">
+      <main className="max-w-2xl mx-auto p-4 space-y-3 relative z-10">
         {!isInitialized ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-fb-spin" />
+            <div className="w-10 h-10 border-4 border-[#E4E6EB] border-t-[#1877F2] rounded-full animate-meta-spin" />
           </div>
         ) : (
           <>
             {/* Info Card */}
-            <div className={`bg-white/90 backdrop-blur-[2px] rounded-lg shadow-lg transition-all duration-250 ${
-              isGenerating ? 'opacity-50 scale-[0.98]' : 'opacity-100 scale-100'
-            }`}>
+            <div
+              className={`bg-white rounded-lg transition-all duration-300 ${
+                isGenerating ? 'opacity-60 scale-[0.98]' : 'opacity-100 scale-100'
+              }`}
+              style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, .1)' }}
+            >
               <InfoRow label="姓氏" value={userInfo.lastName} onCopy={() => copyToClipboard(userInfo.lastName, '姓氏')} isCopied={copiedField === '姓氏'} />
               <InfoRow label="名字" value={userInfo.firstName} onCopy={() => copyToClipboard(userInfo.firstName, '名字')} isCopied={copiedField === '名字'} />
               <InfoRow label="生日" value={userInfo.birthday} onCopy={() => copyToClipboard(userInfo.birthday, '生日')} isCopied={copiedField === '生日'} />
               <InfoRow label="手机号" value={userInfo.phone} onCopy={() => copyToClipboard(userInfo.phone, '手机号')} isCopied={copiedField === '手机号'} />
               <InfoRow label="密码" value={userInfo.password} onCopy={() => copyToClipboard(userInfo.password, '密码')} isCopied={copiedField === '密码'} />
-              
+
               <div className="p-4 space-y-3">
                 <button
                   onClick={() => copyToClipboard(userInfo.email, '邮箱')}
-                  className="w-full flex items-center justify-between py-2 hover:bg-gray-50 rounded transition-colors duration-150 touch-manipulation"
+                  className="w-full flex items-center justify-between py-2.5 px-3 hover:bg-[#F2F3F5] active:bg-[#E4E6EB] rounded-md transition-colors duration-200 touch-manipulation relative overflow-hidden group"
                 >
-                  <span className="text-sm font-semibold text-gray-500">邮箱</span>
+                  <span className="text-sm font-semibold text-[#65676B]">邮箱</span>
                   <div className="flex items-center gap-2 min-w-0 flex-1 justify-end overflow-hidden">
                     <div className="relative w-full flex justify-end">
-                      <span 
-                        className={`text-sm font-medium text-gray-900 truncate transition-all duration-150 ${
-                          copiedField === '邮箱' ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                      <span
+                        className={`text-sm font-medium text-[#050505] truncate transition-all duration-200 ${
+                          copiedField === '邮箱' ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'
                         }`}
                       >
                         {userInfo.email}
                       </span>
-                      <div 
-                        className={`absolute right-0 flex items-center gap-1.5 transition-all duration-150 ${
-                          copiedField === '邮箱' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                      <div
+                        className={`absolute right-0 flex items-center gap-1.5 transition-all duration-200 ${
+                          copiedField === '邮箱' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2 pointer-events-none'
                         }`}
                       >
-                        <Icon name="check" className="w-4 h-4 text-green-600" />
-                        <span className="text-sm font-medium text-green-600 whitespace-nowrap">已复制</span>
+                        <Icon name="check" className="w-4 h-4 text-[#1877F2]" />
+                        <span className="text-sm font-semibold text-[#1877F2] whitespace-nowrap">已复制</span>
                       </div>
                     </div>
                   </div>
+                  <div className="absolute inset-0 bg-[#E4E6EB] opacity-0 group-active:opacity-100 transition-opacity duration-200 pointer-events-none" />
                 </button>
-                
+
                 <button
                   onClick={handleInboxClick}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-150 touch-manipulation"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#E4E6EB] hover:bg-[#D8DADF] active:bg-[#CED0D4] rounded-md transition-all duration-200 touch-manipulation font-semibold text-sm text-[#050505]"
                 >
-                  <Icon name="inbox" className="w-4 h-4 text-gray-700" />
-                  <span className="text-sm font-semibold text-gray-700">查看收件箱</span>
+                  <Icon name="inbox" className="w-4 h-4 text-[#050505]" />
+                  <span>查看收件箱</span>
                 </button>
               </div>
             </div>
@@ -439,60 +420,61 @@ export default function FacebookStyleGenerator() {
             <button
               onClick={generate}
               disabled={isGenerating}
-              className={`w-full py-3 bg-blue-600/90 backdrop-blur-[2px] hover:bg-blue-700 rounded-lg shadow-lg transition-all duration-150 flex items-center justify-center gap-2 touch-manipulation ${
-                isGenerating ? 'opacity-70 cursor-not-allowed' : ''
+              className={`w-full py-3 bg-[#1877F2] hover:bg-[#166FE5] active:bg-[#1567D3] rounded-lg transition-all duration-200 flex items-center justify-center gap-2 touch-manipulation font-bold text-base text-white ${
+                isGenerating ? 'opacity-60 cursor-not-allowed' : ''
               }`}
+              style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, .1)' }}
             >
-              <Icon name="refresh" className={`w-5 h-5 text-white transition-transform duration-600 ${
-                isGenerating ? 'animate-fb-spin' : ''
+              <Icon name="refresh" className={`w-5 h-5 text-white transition-transform duration-500 ${
+                isGenerating ? 'animate-meta-spin' : ''
               }`} />
-              <span className="text-base font-semibold text-white">
-                {isGenerating ? '生成中...' : '生成新身份'}
-              </span>
+              <span>{isGenerating ? '生成中...' : '生成新身份'}</span>
             </button>
 
             {/* Settings */}
-            <div className="bg-white/90 backdrop-blur-[2px] rounded-lg shadow-lg divide-y divide-gray-200">
+            <div className="bg-white rounded-lg divide-y divide-[#CED0D4]" style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, .1)' }}>
               <button
                 onClick={() => setShowCountryModal(true)}
-                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-all duration-150 touch-manipulation"
+                className="w-full flex items-center justify-between p-4 hover:bg-[#F2F3F5] active:bg-[#E4E6EB] transition-all duration-200 touch-manipulation relative overflow-hidden group first:rounded-t-lg"
               >
                 <div className="flex items-center gap-3">
-                  <Icon name="globe" className="w-5 h-5 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-900">地区</span>
+                  <Icon name="globe" className="w-5 h-5 text-[#65676B]" />
+                  <span className="text-sm font-semibold text-[#050505]">地区</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">{selectedCountry.name}</span>
-                  <Icon name="chevronRight" className="w-5 h-5 text-gray-400" />
+                  <span className="text-sm text-[#65676B] font-normal">{selectedCountry.name}</span>
+                  <Icon name="chevronRight" className="w-5 h-5 text-[#8A8D91]" />
                 </div>
+                <div className="absolute inset-0 bg-[#E4E6EB] opacity-0 group-active:opacity-100 transition-opacity duration-200 pointer-events-none" />
               </button>
-              
+
               <button
                 onClick={() => setShowDomainModal(true)}
-                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-all duration-150 touch-manipulation"
+                className="w-full flex items-center justify-between p-4 hover:bg-[#F2F3F5] active:bg-[#E4E6EB] transition-all duration-200 touch-manipulation relative overflow-hidden group last:rounded-b-lg"
               >
                 <div className="flex items-center gap-3">
-                  <Icon name="inbox" className="w-5 h-5 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-900">邮箱域名</span>
+                  <Icon name="inbox" className="w-5 h-5 text-[#65676B]" />
+                  <span className="text-sm font-semibold text-[#050505]">邮箱域名</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">{displayDomain}</span>
-                  <Icon name="chevronRight" className="w-5 h-5 text-gray-400" />
+                  <span className="text-sm text-[#65676B] font-normal">{displayDomain}</span>
+                  <Icon name="chevronRight" className="w-5 h-5 text-[#8A8D91]" />
                 </div>
+                <div className="absolute inset-0 bg-[#E4E6EB] opacity-0 group-active:opacity-100 transition-opacity duration-200 pointer-events-none" />
               </button>
             </div>
 
             {/* Footer */}
             <div className="text-center py-6 space-y-3">
-              <a 
-                href="https://t.me/fang180" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-150"
+              <a
+                href="https://t.me/fang180"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-sm font-semibold text-[#1877F2] hover:underline transition-all duration-200"
               >
                 加入 Telegram 频道
               </a>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#65676B]">
                 支持 {countries.length} 个国家 • {allDomains.length} 个域名
               </p>
             </div>
@@ -508,160 +490,6 @@ export default function FacebookStyleGenerator() {
       <Modal isOpen={showDomainModal} onClose={() => setShowDomainModal(false)} title="选择域名">
         <DomainList allDomains={allDomains} selectedDomain={selectedDomain} onSelect={handleDomainSelect} />
       </Modal>
-
-      <style jsx global>{`
-        /* Facebook 官方字体系统 - 完整版 */
-        
-        /* 全局字体设置 - 完全匹配 Facebook */
-        * {
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, 
-                       'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        body {
-          /* Facebook 在不同平台的字体优先级 */
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
-                       'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 
-                       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 
-                       'Noto Color Emoji';
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          text-rendering: optimizeLegibility;
-        }
-        
-        /* Facebook 字重系统（精确匹配） */
-        .font-normal {
-          font-weight: 400;
-        }
-        
-        .font-medium {
-          font-weight: 500;
-        }
-        
-        .font-semibold {
-          font-weight: 600;
-        }
-        
-        .font-bold {
-          font-weight: 700;
-        }
-        
-        /* Facebook 文字尺寸系统 */
-        .text-xs {
-          font-size: 12px;
-          line-height: 16px;
-        }
-        
-        .text-sm {
-          font-size: 13px;
-          line-height: 16px;
-        }
-        
-        .text-base {
-          font-size: 15px;
-          line-height: 20px;
-        }
-        
-        .text-lg {
-          font-size: 17px;
-          line-height: 20px;
-        }
-        
-        .text-xl {
-          font-size: 20px;
-          line-height: 24px;
-        }
-        
-        /* Facebook 颜色系统 */
-        :root {
-          --fb-blue: #1877f2;
-          --fb-blue-hover: #166fe5;
-          --fb-blue-active: #0a5dcb;
-          --fb-text-primary: #050505;
-          --fb-text-secondary: #65676b;
-          --fb-text-tertiary: #8a8d91;
-          --fb-border: #ced0d4;
-          --fb-background: #f0f2f5;
-          --fb-background-hover: #e4e6eb;
-        }
-        
-        /* 优化的动画 - 专为移动端优化 */
-        
-        /* 淡入动画 - 150ms（更快） */
-        @keyframes fb-fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        /* 缩放淡入 - 150ms */
-        @keyframes fb-scale-fade {
-          from { 
-            opacity: 0;
-            transform: scale(0.96);
-          }
-          to { 
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        /* 旋转动画 - 匀速 */
-        @keyframes fb-spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        
-        /* 脉冲动画 - 慢速 */
-        @keyframes fb-pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.6; }
-        }
-        
-        .animate-fb-fade-in {
-          animation: fb-fade-in 150ms ease-out;
-        }
-        
-        .animate-fb-scale-fade {
-          animation: fb-scale-fade 150ms cubic-bezier(0.08, 0.52, 0.52, 1);
-        }
-        
-        .animate-fb-spin {
-          animation: fb-spin 600ms linear infinite;
-        }
-        
-        .animate-fb-pulse {
-          animation: fb-pulse 2s ease-in-out infinite;
-        }
-        
-        /* 优化的过渡时长 */
-        .duration-150 {
-          transition-duration: 150ms;
-        }
-        
-        .duration-200 {
-          transition-duration: 200ms;
-        }
-        
-        .duration-250 {
-          transition-duration: 250ms;
-        }
-        
-        .duration-600 {
-          transition-duration: 600ms;
-        }
-        
-        /* 移动端点击优化 */
-        .touch-manipulation {
-          touch-action: manipulation;
-          -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* 硬件加速 */
-        button {
-          will-change: transform;
-          transform: translateZ(0);
-        }
-      `}</style>
     </div>
   );
 }
